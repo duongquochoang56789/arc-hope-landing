@@ -8,30 +8,31 @@ import { toast } from "sonner";
 import heroImage from "@/assets/hero-classroom.jpg";
 import successStory from "@/assets/success-story.jpg";
 import graduationImage from "@/assets/graduation-embrace.jpg";
-
 const Index = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
     goal: "",
-    income: "",
+    income: ""
   });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm nhất có thể.");
-    setFormData({ name: "", phone: "", email: "", goal: "", income: "" });
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      goal: "",
+      income: ""
+    });
   };
-
-  return (
-    <div className="min-h-screen bg-background font-inter">
+  return <div className="min-h-screen bg-background font-inter">
       {/* Hero Section */}
       <section className="relative h-screen w-full overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
+        <div className="absolute inset-0 bg-cover bg-center" style={{
+        backgroundImage: `url(${heroImage})`
+      }}>
           <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-accent/50 to-muted/70" />
         </div>
         
@@ -54,21 +55,15 @@ const Index = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button 
-                variant="hero" 
-                size="lg" 
-                className="text-lg px-10 py-7 rounded-xl"
-                onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
-              >
+              <Button variant="hero" size="lg" className="text-lg px-10 py-7 rounded-xl" onClick={() => document.getElementById('registration-form')?.scrollIntoView({
+              behavior: 'smooth'
+            })}>
                 <Heart className="mr-2 h-5 w-5" />
                 Tôi muốn học miễn phí
               </Button>
-              <Button 
-                variant="heroPink" 
-                size="lg" 
-                className="text-lg px-10 py-7 rounded-xl"
-                onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
-              >
+              <Button variant="heroPink" size="lg" className="text-lg px-10 py-7 rounded-xl" onClick={() => document.getElementById('registration-form')?.scrollIntoView({
+              behavior: 'smooth'
+            })}>
                 <DollarSign className="mr-2 h-5 w-5" />
                 Tôi muốn tài trợ ngay
               </Button>
@@ -91,7 +86,7 @@ const Index = () => {
               
               <div className="bg-muted p-8 rounded-2xl border-l-4 border-primary shadow-soft">
                 <h3 className="font-playfair text-2xl font-semibold text-primary mb-4">
-                  Câu Chuyện Thật
+                  Câu Chuyện Thật  
                 </h3>
                 <p className="text-foreground/80 leading-relaxed mb-4">
                   <span className="font-semibold">Anh Tuấn</span>, 28 tuổi, công nhân nhà máy với mức lương 7 triệu/tháng. Sau 6 tháng học tại Arc Hope với sự mentoring tận tâm 1-1, anh đã chuyển sang làm việc cho công ty nước ngoài với mức lương 25 triệu/tháng.
@@ -103,11 +98,7 @@ const Index = () => {
             </div>
             
             <div className="relative">
-              <img 
-                src={successStory} 
-                alt="Câu chuyện thành công" 
-                className="rounded-3xl shadow-warm w-full h-auto animate-float"
-              />
+              <img src={successStory} alt="Câu chuyện thành công" className="rounded-3xl shadow-warm w-full h-auto animate-float" />
             </div>
           </div>
         </div>
@@ -137,17 +128,27 @@ const Index = () => {
             
             {/* Five Petals */}
             <div className="grid md:grid-cols-5 gap-6">
-              {[
-                { icon: BookOpen, title: "Giáo Trình", desc: "Chuẩn quốc tế, phù hợp người Việt" },
-                { icon: Users, title: "Mentoring 1-1", desc: "Hỗ trợ cá nhân hóa" },
-                { icon: TrendingUp, title: "Theo Dõi Tiến Độ", desc: "Đánh giá định kỳ" },
-                { icon: Award, title: "Kết Nối Việc Làm", desc: "Cơ hội nghề nghiệp" },
-                { icon: Heart, title: "Cộng Đồng", desc: "Hỗ trợ lâu dài" },
-              ].map((petal, index) => (
-                <div 
-                  key={index}
-                  className="bg-secondary p-6 rounded-2xl shadow-soft hover:shadow-warm transition-all duration-300 hover:-translate-y-2"
-                >
+              {[{
+              icon: BookOpen,
+              title: "Giáo Trình",
+              desc: "Chuẩn quốc tế, phù hợp người Việt"
+            }, {
+              icon: Users,
+              title: "Mentoring 1-1",
+              desc: "Hỗ trợ cá nhân hóa"
+            }, {
+              icon: TrendingUp,
+              title: "Theo Dõi Tiến Độ",
+              desc: "Đánh giá định kỳ"
+            }, {
+              icon: Award,
+              title: "Kết Nối Việc Làm",
+              desc: "Cơ hội nghề nghiệp"
+            }, {
+              icon: Heart,
+              title: "Cộng Đồng",
+              desc: "Hỗ trợ lâu dài"
+            }].map((petal, index) => <div key={index} className="bg-secondary p-6 rounded-2xl shadow-soft hover:shadow-warm transition-all duration-300 hover:-translate-y-2">
                   <petal.icon className="h-10 w-10 text-primary mx-auto mb-4" />
                   <h3 className="font-playfair text-lg font-semibold text-primary mb-2">
                     {petal.title}
@@ -155,8 +156,7 @@ const Index = () => {
                   <p className="text-sm text-muted-foreground">
                     {petal.desc}
                   </p>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
         </div>
@@ -182,19 +182,12 @@ const Index = () => {
               </div>
               
               <ul className="space-y-4">
-                {[
-                  "Thu nhập gia đình dưới 15 triệu/tháng",
-                  "Có động lực học tập và quyết tâm thay đổi",
-                  "Cam kết tham gia đầy đủ các buổi học",
-                  "Sẵn sàng học tập nghiêm túc và đóng góp cộng đồng",
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
+                {["Thu nhập gia đình dưới 15 triệu/tháng", "Có động lực học tập và quyết tâm thay đổi", "Cam kết tham gia đầy đủ các buổi học", "Sẵn sàng học tập nghiêm túc và đóng góp cộng đồng"].map((item, index) => <li key={index} className="flex items-start gap-3">
                     <div className="bg-accent rounded-full p-1 mt-1">
                       <div className="w-2 h-2 bg-primary rounded-full" />
                     </div>
                     <span className="text-foreground/80">{item}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </div>
             
@@ -210,19 +203,12 @@ const Index = () => {
               </div>
               
               <ul className="space-y-4">
-                {[
-                  "Tin tương vào sức mạnh của giáo dục",
-                  "Muốn tạo tác động xã hội có ý nghĩa",
-                  "Mong muốn đồng hành cùng học viên",
-                  "Nhận báo cáo minh bạch về kết quả sử dụng",
-                ].map((item, index) => (
-                  <li key={index} className="flex items-start gap-3">
+                {["Tin tương vào sức mạnh của giáo dục", "Muốn tạo tác động xã hội có ý nghĩa", "Mong muốn đồng hành cùng học viên", "Nhận báo cáo minh bạch về kết quả sử dụng"].map((item, index) => <li key={index} className="flex items-start gap-3">
                     <div className="bg-accent rounded-full p-1 mt-1">
                       <div className="w-2 h-2 bg-primary rounded-full" />
                     </div>
                     <span className="text-foreground/80">{item}</span>
-                  </li>
-                ))}
+                  </li>)}
               </ul>
             </div>
           </div>
@@ -296,11 +282,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
-              <img 
-                src={graduationImage} 
-                alt="Lễ tốt nghiệp đầy cảm xúc" 
-                className="rounded-3xl shadow-warm w-full h-auto"
-              />
+              <img src={graduationImage} alt="Lễ tốt nghiệp đầy cảm xúc" className="rounded-3xl shadow-warm w-full h-auto" />
             </div>
             
             <div className="space-y-6 order-1 md:order-2">
@@ -319,12 +301,9 @@ const Index = () => {
               </p>
               
               <div className="pt-4">
-                <Button 
-                  variant="hero" 
-                  size="lg" 
-                  className="text-lg px-10 py-7 rounded-xl"
-                  onClick={() => document.getElementById('registration-form')?.scrollIntoView({ behavior: 'smooth' })}
-                >
+                <Button variant="hero" size="lg" className="text-lg px-10 py-7 rounded-xl" onClick={() => document.getElementById('registration-form')?.scrollIntoView({
+                behavior: 'smooth'
+              })}>
                   Bắt đầu hành trình của bạn ngay
                 </Button>
               </div>
@@ -350,71 +329,50 @@ const Index = () => {
               <Label htmlFor="name" className="text-foreground font-medium">
                 Họ và Tên <span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Nguyễn Văn A"
-                required
-                className="border-border focus:border-primary"
-              />
+              <Input id="name" value={formData.name} onChange={e => setFormData({
+              ...formData,
+              name: e.target.value
+            })} placeholder="Nguyễn Văn A" required className="border-border focus:border-primary" />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="phone" className="text-foreground font-medium">
                 Số Điện Thoại <span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="0901234567"
-                required
-                className="border-border focus:border-primary"
-              />
+              <Input id="phone" type="tel" value={formData.phone} onChange={e => setFormData({
+              ...formData,
+              phone: e.target.value
+            })} placeholder="0901234567" required className="border-border focus:border-primary" />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground font-medium">
                 Email <span className="text-destructive">*</span>
               </Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="email@example.com"
-                required
-                className="border-border focus:border-primary"
-              />
+              <Input id="email" type="email" value={formData.email} onChange={e => setFormData({
+              ...formData,
+              email: e.target.value
+            })} placeholder="email@example.com" required className="border-border focus:border-primary" />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="goal" className="text-foreground font-medium">
                 Mục Tiêu Của Bạn <span className="text-destructive">*</span>
               </Label>
-              <Textarea
-                id="goal"
-                value={formData.goal}
-                onChange={(e) => setFormData({ ...formData, goal: e.target.value })}
-                placeholder="Chia sẻ mục tiêu và ước mơ của bạn..."
-                required
-                className="border-border focus:border-primary min-h-[100px]"
-              />
+              <Textarea id="goal" value={formData.goal} onChange={e => setFormData({
+              ...formData,
+              goal: e.target.value
+            })} placeholder="Chia sẻ mục tiêu và ước mơ của bạn..." required className="border-border focus:border-primary min-h-[100px]" />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="income" className="text-foreground font-medium">
                 Thu Nhập Gia Đình <span className="text-destructive">*</span>
               </Label>
-              <select
-                id="income"
-                value={formData.income}
-                onChange={(e) => setFormData({ ...formData, income: e.target.value })}
-                required
-                className="w-full h-10 px-3 py-2 rounded-md border border-border bg-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
+              <select id="income" value={formData.income} onChange={e => setFormData({
+              ...formData,
+              income: e.target.value
+            })} required className="w-full h-10 px-3 py-2 rounded-md border border-border bg-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
                 <option value="">Chọn mức thu nhập</option>
                 <option value="under-10">Dưới 10 triệu/tháng</option>
                 <option value="10-20">10-20 triệu/tháng</option>
@@ -422,12 +380,7 @@ const Index = () => {
               </select>
             </div>
             
-            <Button 
-              type="submit" 
-              variant="hero" 
-              size="lg" 
-              className="w-full text-lg py-6"
-            >
+            <Button type="submit" variant="hero" size="lg" className="w-full text-lg py-6">
               Gửi Đăng Ký
             </Button>
             
@@ -473,8 +426,6 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
