@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Heart, Users, BookOpen, TrendingUp, Award, DollarSign } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-classroom.jpg";
 import successStory from "@/assets/success-story.jpg";
 import graduationImage from "@/assets/graduation-embrace.jpg";
@@ -16,16 +17,35 @@ const Index = () => {
     goal: "",
     income: ""
   });
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm nhất có thể.");
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      goal: "",
-      income: ""
-    });
+    
+    try {
+      const { error } = await supabase
+        .from('students')
+        .insert([{
+          full_name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          goal: formData.goal,
+          income: formData.income,
+        }]);
+
+      if (error) throw error;
+
+      toast.success("Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm nhất có thể.");
+      
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        goal: "",
+        income: ""
+      });
+    } catch (error) {
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
+      console.error('Error submitting form:', error);
+    }
   };
   return <div className="min-h-screen bg-background font-inter">
       {/* Hero Section */}
