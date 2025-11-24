@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          author_name: string
+          content: string
+          created_at: string
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          published_at: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string
+          content: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          published_at?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          published_at?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       students: {
         Row: {
           created_at: string
@@ -47,6 +86,54 @@ export type Database = {
           phone?: string
           status?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_order: number | null
+          id: string
+          is_featured: boolean | null
+          new_job: string | null
+          new_salary: string | null
+          old_job: string | null
+          old_salary: string | null
+          student_name: string
+          student_story: string
+          updated_at: string
+          year_graduated: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_featured?: boolean | null
+          new_job?: string | null
+          new_salary?: string | null
+          old_job?: string | null
+          old_salary?: string | null
+          student_name: string
+          student_story: string
+          updated_at?: string
+          year_graduated?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_featured?: boolean | null
+          new_job?: string | null
+          new_salary?: string | null
+          old_job?: string | null
+          old_salary?: string | null
+          student_name?: string
+          student_story?: string
+          updated_at?: string
+          year_graduated?: number | null
         }
         Relationships: []
       }
