@@ -9,6 +9,27 @@ import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-classroom.jpg";
 import successStory from "@/assets/success-story.jpg";
 import graduationImage from "@/assets/graduation-embrace.jpg";
+import { z } from "zod";
+
+const studentSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(2, "Họ tên phải có ít nhất 2 ký tự")
+    .max(100, "Họ tên không được quá 100 ký tự"),
+  phone: z.string()
+    .regex(/^[0-9]{10,11}$/, "Số điện thoại phải có 10-11 chữ số"),
+  email: z.string()
+    .email("Email không hợp lệ")
+    .max(255, "Email quá dài"),
+  goal: z.string()
+    .trim()
+    .min(10, "Mục tiêu phải có ít nhất 10 ký tự")
+    .max(500, "Mục tiêu không được quá 500 ký tự"),
+  income: z.enum(["under_10m", "10_20m", "over_20m"], {
+    errorMap: () => ({ message: "Vui lòng chọn mức thu nhập" })
+  })
+});
+
 const Index = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -21,14 +42,17 @@ const Index = () => {
     e.preventDefault();
     
     try {
+      // Validate form data
+      const validated = studentSchema.parse(formData);
+
       const { error } = await supabase
         .from('students')
         .insert([{
-          full_name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          goal: formData.goal,
-          income: formData.income,
+          full_name: validated.name,
+          phone: validated.phone,
+          email: validated.email,
+          goal: validated.goal,
+          income: validated.income,
         }]);
 
       if (error) throw error;
@@ -43,8 +67,17 @@ const Index = () => {
         income: ""
       });
     } catch (error) {
-      toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
-      console.error('Error submitting form:', error);
+      // Only log errors in development
+      if (import.meta.env.DEV) {
+        console.error('Error submitting form:', error);
+      }
+
+      // Handle validation errors
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error("Có lỗi xảy ra. Vui lòng thử lại sau.");
+      }
     }
   };
   return <div className="min-h-screen bg-background font-inter">

@@ -60,7 +60,9 @@ const Admin = () => {
       setIsAdmin(true);
       fetchStudents();
     } catch (error) {
-      console.error('Error checking admin access:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error checking admin access:', error);
+      }
       navigate("/auth");
     }
   };
