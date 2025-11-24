@@ -7,6 +7,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Shield } from "lucide-react";
+import { z } from "zod";
+
+const authSchema = z.object({
+  email: z.string().email("Email không hợp lệ").max(255, "Email quá dài"),
+  password: z.string()
+    .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+    .regex(/[A-Z]/, "Mật khẩu phải có ít nhất 1 chữ hoa")
+    .regex(/[a-z]/, "Mật khẩu phải có ít nhất 1 chữ thường")
+    .regex(/[0-9]/, "Mật khẩu phải có ít nhất 1 số")
+});
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -38,10 +48,13 @@ const Auth = () => {
     setLoading(true);
 
     try {
+      // Validate input
+      const validated = authSchema.parse({ email, password });
+
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
+          email: validated.email,
+          password: validated.password,
         });
 
         if (error) throw error;
@@ -53,8 +66,8 @@ const Auth = () => {
       } else {
         const redirectUrl = `${window.location.origin}/`;
         const { error } = await supabase.auth.signUp({
-          email,
-          password,
+          email: validated.email,
+          password: validated.password,
           options: {
             emailRedirectTo: redirectUrl,
           },
@@ -68,11 +81,25 @@ const Auth = () => {
         });
       }
     } catch (error: any) {
-      toast({
-        title: "Có lỗi xảy ra",
-        description: error.message || "Vui lòng thử lại sau.",
-        variant: "destructive",
-      });
+      // Only log errors in development
+      if (import.meta.env.DEV) {
+        console.error('Auth error:', error);
+      }
+      
+      // Handle validation errors
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Dữ liệu không hợp lệ",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Có lỗi xảy ra",
+          description: error.message || "Vui lòng thử lại sau.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
