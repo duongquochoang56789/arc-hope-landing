@@ -10,6 +10,9 @@ import heroImage from "@/assets/hero-classroom.jpg";
 import successStory from "@/assets/success-story.jpg";
 import graduationImage from "@/assets/graduation-embrace.jpg";
 import { z } from "zod";
+import { ChatBot } from "@/components/ChatBot";
+import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
+import { Link } from "react-router-dom";
 
 const studentSchema = z.object({
   name: z.string()
@@ -156,6 +159,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Carousel */}
+      <TestimonialsCarousel />
 
       {/* Model Section - Infographic */}
       <section className="py-20 px-4 bg-background">
@@ -470,6 +476,11 @@ const Index = () => {
                 <li>Arc Blaze Ecosystem</li>
                 <li>Dự án phi lợi nhuận</li>
                 <li>Minh bạch - Hiệu quả - Nhân văn</li>
+                <li>
+                  <Link to="/blog" className="hover:text-primary-foreground transition-colors">
+                    Blog & Tin tức
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -479,6 +490,9 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* AI ChatBot */}
+      <ChatBot />
     </div>;
 };
 export default Index;

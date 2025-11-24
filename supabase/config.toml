@@ -1,1 +1,4 @@
 project_id = "erhgwgdgoolxycmpvkij"
+
+[functions.arc-hope-chat]
+verify_jwt = false
