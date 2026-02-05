@@ -13,7 +13,9 @@ import { z } from "zod";
 import { ChatBot } from "@/components/ChatBot";
 import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
 import { Link } from "react-router-dom";
-
+import { SponsorsSection } from "@/components/SponsorsSection";
+import { FAQSection } from "@/components/FAQSection";
+import { ImpactCounter } from "@/components/ImpactCounter";
 const studentSchema = z.object({
   name: z.string()
     .trim()
@@ -163,6 +165,11 @@ const Index = () => {
       {/* Testimonials Carousel */}
       <TestimonialsCarousel />
 
+      {/* Sponsors Section */}
+      <SponsorsSection />
+
+      {/* Impact Counter */}
+      <ImpactCounter />
       {/* Model Section - Infographic */}
       <section className="py-20 px-4 bg-background">
         <div className="max-w-6xl mx-auto text-center">
@@ -371,8 +378,11 @@ const Index = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <FAQSection />
+
       {/* Registration Form */}
-      <section id="registration-form" className="py-20 px-4 bg-muted">
+      <section id="registration-form" className="py-20 px-4 bg-background">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="font-playfair text-4xl md:text-5xl font-bold text-primary mb-4">
