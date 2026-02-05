@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { SponsorsSection } from "@/components/SponsorsSection";
 import { FAQSection } from "@/components/FAQSection";
 import { ImpactCounter } from "@/components/ImpactCounter";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 const studentSchema = z.object({
   name: z.string()
     .trim()
@@ -463,12 +464,15 @@ const Index = () => {
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <h3 className="font-playfair text-2xl font-bold mb-4">ARC HOPE</h3>
-              <p className="text-primary-foreground/80">
+              <p className="text-primary-foreground/80 mb-4">
                 Tiếng Anh miễn phí cho người nghèo - Một dự án của Arc Blaze Ecosystem
               </p>
+              <div className="bg-primary-foreground/10 rounded-xl p-4">
+                <NewsletterSignup />
+              </div>
             </div>
             
             <div>
@@ -481,16 +485,32 @@ const Index = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Về Chúng Tôi</h4>
+              <h4 className="font-semibold mb-4">Tham Gia</h4>
               <ul className="space-y-2 text-primary-foreground/80">
-                <li>Arc Blaze Ecosystem</li>
-                <li>Dự án phi lợi nhuận</li>
-                <li>Minh bạch - Hiệu quả - Nhân văn</li>
+                <li>
+                  <Link to="/portal" className="hover:text-primary-foreground transition-colors">
+                    Cổng Học Viên
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/volunteer" className="hover:text-primary-foreground transition-colors">
+                    Đăng Ký Tình Nguyện
+                  </Link>
+                </li>
                 <li>
                   <Link to="/blog" className="hover:text-primary-foreground transition-colors">
                     Blog & Tin tức
                   </Link>
                 </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Về Chúng Tôi</h4>
+              <ul className="space-y-2 text-primary-foreground/80">
+                <li>Arc Blaze Ecosystem</li>
+                <li>Dự án phi lợi nhuận</li>
+                <li>Minh bạch - Hiệu quả - Nhân văn</li>
               </ul>
             </div>
           </div>
