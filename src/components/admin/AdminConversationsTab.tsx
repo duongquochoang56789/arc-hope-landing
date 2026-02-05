@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { MessageCircle, Eye, Sparkles, TrendingUp, Users, Target } from "lucide-react";
+import { MessageCircle, Eye, Sparkles, TrendingUp, Users, Target, Download } from "lucide-react";
 
 type Conversation = {
   id: string;
@@ -47,6 +47,29 @@ const AdminConversationsTab = () => {
   useEffect(() => {
     fetchConversations();
   }, []);
+
+  const exportToCSV = () => {
+    const headers = ['Thời gian', 'Tên', 'Email', 'Phân loại', 'Khóa học đề xuất', 'Số tin nhắn'];
+    const rows = conversations.map(c => [
+      new Date(c.created_at).toLocaleString('vi-VN'),
+      c.student_name || '',
+      c.student_email || '',
+      CLASSIFICATION_LABELS[c.classification || '']?.label || '',
+      c.recommended_courses?.join('; ') || '',
+      c.message_count || 0
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `conversations_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    toast({ title: "Xuất file thành công", description: `Đã xuất ${conversations.length} cuộc trò chuyện ra file CSV` });
+  };
 
   const fetchConversations = async () => {
     try {
@@ -166,13 +189,21 @@ const AdminConversationsTab = () => {
       {/* Conversations Table */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5" />
-            Lịch sử trò chuyện AI
-          </CardTitle>
-          <CardDescription>
-            Xem và phân tích các cuộc trò chuyện với chatbot
-          </CardDescription>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                Lịch sử trò chuyện AI
+              </CardTitle>
+              <CardDescription>
+                Xem và phân tích các cuộc trò chuyện với chatbot
+              </CardDescription>
+            </div>
+            <Button variant="outline" size="sm" onClick={exportToCSV}>
+              <Download className="w-4 h-4 mr-2" />
+              Xuất CSV
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
