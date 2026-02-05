@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Trash2, Image as ImageIcon } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 type BlogPost = {
   id: string;
@@ -240,15 +241,13 @@ const AdminBlogTab = () => {
                   onChange={(e) => setFormData({ ...formData, author_name: e.target.value })}
                 />
               </div>
-              <div>
-                <Label htmlFor="featured_image">URL ảnh đại diện</Label>
-                <Input
-                  id="featured_image"
-                  value={formData.featured_image}
-                  onChange={(e) => setFormData({ ...formData, featured_image: e.target.value })}
-                  placeholder="https://..."
-                />
-              </div>
+              <ImageUpload
+                bucket="blog-images"
+                value={formData.featured_image}
+                onChange={(url) => setFormData({ ...formData, featured_image: url })}
+                label="Ảnh đại diện"
+                folder="posts"
+              />
               <div className="flex gap-2 justify-end">
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Hủy
@@ -265,6 +264,7 @@ const AdminBlogTab = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-16">Ảnh</TableHead>
               <TableHead>Tiêu đề</TableHead>
               <TableHead>Tác giả</TableHead>
               <TableHead>Ngày đăng</TableHead>
@@ -274,6 +274,19 @@ const AdminBlogTab = () => {
           <TableBody>
             {posts.map((post) => (
               <TableRow key={post.id}>
+                <TableCell>
+                  {post.featured_image ? (
+                    <img 
+                      src={post.featured_image} 
+                      alt={post.title}
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-muted rounded flex items-center justify-center">
+                      <ImageIcon className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                  )}
+                </TableCell>
                 <TableCell className="font-medium">{post.title}</TableCell>
                 <TableCell>{post.author_name}</TableCell>
                 <TableCell>

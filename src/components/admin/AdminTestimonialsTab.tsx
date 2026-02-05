@@ -9,7 +9,8 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Edit, Trash2, Star } from "lucide-react";
+import { Plus, Edit, Trash2, Star, User } from "lucide-react";
+import { ImageUpload } from "./ImageUpload";
 
 type Testimonial = {
   id: string;
@@ -270,15 +271,13 @@ const AdminTestimonialsTab = () => {
                   />
                 </div>
               </div>
-              <div>
-                <Label htmlFor="avatar_url">URL ảnh đại diện</Label>
-                <Input
-                  id="avatar_url"
-                  value={formData.avatar_url}
-                  onChange={(e) => setFormData({ ...formData, avatar_url: e.target.value })}
-                  placeholder="https://..."
-                />
-              </div>
+              <ImageUpload
+                bucket="testimonials"
+                value={formData.avatar_url}
+                onChange={(url) => setFormData({ ...formData, avatar_url: url })}
+                label="Ảnh đại diện học viên"
+                folder="avatars"
+              />
               <div className="flex items-center gap-2">
                 <Switch
                   id="is_featured"
@@ -303,6 +302,7 @@ const AdminTestimonialsTab = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-16">Ảnh</TableHead>
               <TableHead>Học viên</TableHead>
               <TableHead>Công việc mới</TableHead>
               <TableHead>Lương mới</TableHead>
@@ -314,6 +314,19 @@ const AdminTestimonialsTab = () => {
           <TableBody>
             {testimonials.map((item) => (
               <TableRow key={item.id}>
+                <TableCell>
+                  {item.avatar_url ? (
+                    <img 
+                      src={item.avatar_url} 
+                      alt={item.student_name}
+                      className="w-10 h-10 object-cover rounded-full"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                  )}
+                </TableCell>
                 <TableCell className="font-medium">{item.student_name}</TableCell>
                 <TableCell>{item.new_job || "-"}</TableCell>
                 <TableCell>{item.new_salary || "-"}</TableCell>
