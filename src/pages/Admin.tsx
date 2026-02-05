@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { LogOut, Users, UserCheck, UserX, TrendingUp } from "lucide-react";
+import { LogOut, Users, FileText, Star, Building2, BarChart3, Settings, GraduationCap, TrendingUp, UserCheck, UserX } from "lucide-react";
+
+import AdminStudentsTab from "@/components/admin/AdminStudentsTab";
+import AdminBlogTab from "@/components/admin/AdminBlogTab";
+import AdminTestimonialsTab from "@/components/admin/AdminTestimonialsTab";
+import AdminSponsorsTab from "@/components/admin/AdminSponsorsTab";
+import AdminStatisticsTab from "@/components/admin/AdminStatisticsTab";
+import AdminProgressTab from "@/components/admin/AdminProgressTab";
+import AdminSettingsTab from "@/components/admin/AdminSettingsTab";
 
 type Student = {
   id: string;
@@ -39,7 +46,6 @@ const Admin = () => {
         return;
       }
 
-      // Check if user has admin role
       const { data: roleData, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
@@ -75,7 +81,6 @@ const Admin = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-
       setStudents(data || []);
     } catch (error) {
       toast({
@@ -88,53 +93,9 @@ const Admin = () => {
     }
   };
 
-  const updateStudentStatus = async (id: string, status: string) => {
-    try {
-      const { error } = await supabase
-        .from('students')
-        .update({ status })
-        .eq('id', id);
-
-      if (error) throw error;
-
-      toast({
-        title: "Cập nhật thành công",
-        description: `Đã ${status === 'approved' ? 'chấp nhận' : 'từ chối'} học viên.`,
-      });
-
-      fetchStudents();
-    } catch (error) {
-      toast({
-        title: "Có lỗi xảy ra",
-        description: "Không thể cập nhật trạng thái.",
-        variant: "destructive",
-      });
-    }
-  };
-
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/");
-  };
-
-  const getStatusBadge = (status: string) => {
-    const variants = {
-      pending: "secondary",
-      approved: "default",
-      rejected: "destructive",
-    } as const;
-
-    const labels = {
-      pending: "Chờ xét duyệt",
-      approved: "Đã chấp nhận",
-      rejected: "Đã từ chối",
-    };
-
-    return (
-      <Badge variant={variants[status as keyof typeof variants] || "secondary"}>
-        {labels[status as keyof typeof labels] || status}
-      </Badge>
-    );
   };
 
   if (loading) {
@@ -174,7 +135,7 @@ const Admin = () => {
           </Button>
         </div>
 
-        {/* Stats */}
+        {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -214,72 +175,67 @@ const Admin = () => {
           </Card>
         </div>
 
-        {/* Students Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Danh sách học viên</CardTitle>
-            <CardDescription>
-              Quản lý và xét duyệt các đăng ký học viên mới
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Họ tên</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Điện thoại</TableHead>
-                  <TableHead>Mục tiêu</TableHead>
-                  <TableHead>Thu nhập</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead>Ngày đăng ký</TableHead>
-                  <TableHead>Thao tác</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {students.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell className="font-medium">{student.full_name}</TableCell>
-                    <TableCell>{student.email}</TableCell>
-                    <TableCell>{student.phone}</TableCell>
-                    <TableCell className="max-w-xs truncate">{student.goal}</TableCell>
-                    <TableCell>{student.income}</TableCell>
-                    <TableCell>{getStatusBadge(student.status)}</TableCell>
-                    <TableCell>
-                      {new Date(student.created_at).toLocaleDateString('vi-VN')}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        {student.status !== 'approved' && (
-                          <Button
-                            size="sm"
-                            onClick={() => updateStudentStatus(student.id, 'approved')}
-                          >
-                            Chấp nhận
-                          </Button>
-                        )}
-                        {student.status !== 'rejected' && (
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => updateStudentStatus(student.id, 'rejected')}
-                          >
-                            Từ chối
-                          </Button>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            {students.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground">
-                Chưa có học viên nào đăng ký
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Tabs */}
+        <Tabs defaultValue="students" className="space-y-6">
+          <TabsList className="grid grid-cols-7 lg:w-fit">
+            <TabsTrigger value="students" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">Học viên</span>
+            </TabsTrigger>
+            <TabsTrigger value="progress" className="flex items-center gap-2">
+              <GraduationCap className="w-4 h-4" />
+              <span className="hidden sm:inline">Tiến độ</span>
+            </TabsTrigger>
+            <TabsTrigger value="blog" className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Blog</span>
+            </TabsTrigger>
+            <TabsTrigger value="testimonials" className="flex items-center gap-2">
+              <Star className="w-4 h-4" />
+              <span className="hidden sm:inline">Testimonials</span>
+            </TabsTrigger>
+            <TabsTrigger value="sponsors" className="flex items-center gap-2">
+              <Building2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Tài trợ</span>
+            </TabsTrigger>
+            <TabsTrigger value="statistics" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">Thống kê</span>
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              <span className="hidden sm:inline">Cài đặt</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="students">
+            <AdminStudentsTab students={students} onRefresh={fetchStudents} />
+          </TabsContent>
+
+          <TabsContent value="progress">
+            <AdminProgressTab />
+          </TabsContent>
+
+          <TabsContent value="blog">
+            <AdminBlogTab />
+          </TabsContent>
+
+          <TabsContent value="testimonials">
+            <AdminTestimonialsTab />
+          </TabsContent>
+
+          <TabsContent value="sponsors">
+            <AdminSponsorsTab />
+          </TabsContent>
+
+          <TabsContent value="statistics">
+            <AdminStatisticsTab />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <AdminSettingsTab />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
