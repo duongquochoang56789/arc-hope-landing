@@ -53,6 +53,118 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_conversations: {
+        Row: {
+          classification: string | null
+          created_at: string
+          id: string
+          metadata: Json | null
+          recommended_courses: string[] | null
+          session_id: string
+          student_email: string | null
+          student_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          classification?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          recommended_courses?: string[] | null
+          session_id: string
+          student_email?: string | null
+          student_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          classification?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          recommended_courses?: string[] | null
+          session_id?: string
+          student_email?: string | null
+          student_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_notifications: {
+        Row: {
+          created_at: string
+          email_type: string
+          error_message: string | null
+          id: string
+          recipient_email: string
+          sent_at: string | null
+          status: string | null
+          student_id: string | null
+          subject: string
+        }
+        Insert: {
+          created_at?: string
+          email_type: string
+          error_message?: string | null
+          id?: string
+          recipient_email: string
+          sent_at?: string | null
+          status?: string | null
+          student_id?: string | null
+          subject: string
+        }
+        Update: {
+          created_at?: string
+          email_type?: string
+          error_message?: string | null
+          id?: string
+          recipient_email?: string
+          sent_at?: string | null
+          status?: string | null
+          student_id?: string | null
+          subject?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_notifications_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sponsors: {
         Row: {
           created_at: string

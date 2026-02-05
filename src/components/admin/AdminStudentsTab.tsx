@@ -27,6 +27,9 @@ const AdminStudentsTab = ({ students, onRefresh }: AdminStudentsTabProps) => {
 
   const updateStudentStatus = async (id: string, status: string) => {
     try {
+      // Find the student to get their info
+      const student = students.find(s => s.id === id);
+      
       const { error } = await supabase
         .from('students')
         .update({ status })
@@ -34,9 +37,26 @@ const AdminStudentsTab = ({ students, onRefresh }: AdminStudentsTabProps) => {
 
       if (error) throw error;
 
+      // Send email notification
+      if (student) {
+        try {
+          await supabase.functions.invoke('send-notification', {
+            body: {
+              studentId: id,
+              emailType: status === 'approved' ? 'approved' : 'rejected',
+              recipientEmail: student.email,
+              studentName: student.full_name,
+            },
+          });
+        } catch (emailError) {
+          console.error('Failed to send notification:', emailError);
+          // Don't fail the whole operation if email fails
+        }
+      }
+
       toast({
         title: "Cập nhật thành công",
-        description: `Đã ${status === 'approved' ? 'chấp nhận' : 'từ chối'} học viên.`,
+        description: `Đã ${status === 'approved' ? 'chấp nhận' : 'từ chối'} học viên. Email thông báo đã được gửi.`,
       });
 
       onRefresh();
