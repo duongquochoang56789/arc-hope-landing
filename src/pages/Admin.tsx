@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { LogOut, Users, FileText, Star, Building2, BarChart3, Settings, GraduationCap, TrendingUp, UserCheck, UserX } from "lucide-react";
+import { LogOut, Users, FileText, Star, Building2, BarChart3, Settings, GraduationCap, TrendingUp, UserCheck, UserX, MessageCircle } from "lucide-react";
 
 import AdminStudentsTab from "@/components/admin/AdminStudentsTab";
 import AdminBlogTab from "@/components/admin/AdminBlogTab";
@@ -14,6 +14,7 @@ import AdminSponsorsTab from "@/components/admin/AdminSponsorsTab";
 import AdminStatisticsTab from "@/components/admin/AdminStatisticsTab";
 import AdminProgressTab from "@/components/admin/AdminProgressTab";
 import AdminSettingsTab from "@/components/admin/AdminSettingsTab";
+import AdminConversationsTab from "@/components/admin/AdminConversationsTab";
 
 type Student = {
   id: string;
@@ -177,7 +178,7 @@ const Admin = () => {
 
         {/* Tabs */}
         <Tabs defaultValue="students" className="space-y-6">
-          <TabsList className="grid grid-cols-7 lg:w-fit">
+          <TabsList className="grid grid-cols-8 lg:w-fit">
             <TabsTrigger value="students" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Học viên</span>
@@ -185,6 +186,10 @@ const Admin = () => {
             <TabsTrigger value="progress" className="flex items-center gap-2">
               <GraduationCap className="w-4 h-4" />
               <span className="hidden sm:inline">Tiến độ</span>
+            </TabsTrigger>
+            <TabsTrigger value="conversations" className="flex items-center gap-2">
+              <MessageCircle className="w-4 h-4" />
+              <span className="hidden sm:inline">AI Chat</span>
             </TabsTrigger>
             <TabsTrigger value="blog" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
@@ -214,6 +219,10 @@ const Admin = () => {
 
           <TabsContent value="progress">
             <AdminProgressTab />
+          </TabsContent>
+
+          <TabsContent value="conversations">
+            <AdminConversationsTab />
           </TabsContent>
 
           <TabsContent value="blog">
